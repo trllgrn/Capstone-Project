@@ -28,7 +28,7 @@ public final class ProductDBContract {
 //    end
     public static final class ProductEntry implements BaseColumns {
         public static final String TABLE_NAME = "product";
-        public static final String COLUNM_NAME_CODE = "code";
+        public static final String COLUMN_NAME_CODE = "code";
         public static final String COLUMN_NAME_DESC = "description";
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_DIMENSION = "dimension";

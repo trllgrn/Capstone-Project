@@ -16,7 +16,7 @@ public class ProductDBHelper extends SQLiteOpenHelper {
     final String CREATE_PRODUCT_TABLE =
             "CREATE TABLE " + ProductDBContract.ProductEntry.TABLE_NAME + " (" +
                     ProductDBContract.ProductEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    ProductDBContract.ProductEntry.COLUNM_NAME_CODE + " TEXT NOT NULL, " +
+                    ProductDBContract.ProductEntry.COLUMN_NAME_CODE + " TEXT NOT NULL, " +
                     ProductDBContract.ProductEntry.COLUMN_NAME_DESC + " TEXT, " +
                     ProductDBContract.ProductEntry.COLUMN_NAME_DIMENSION + " TEXT, " +
                     ProductDBContract.ProductEntry.COLUMN_NAME_NAME + " TEXT, " +
@@ -26,7 +26,7 @@ public class ProductDBHelper extends SQLiteOpenHelper {
                     ProductDBContract.ProductEntry.COLUMN_NAME_IMG_LOC_LRG + " TEXT, " +
                     ProductDBContract.ProductEntry.COLUMN_NAME_PRICE + " FLOAT, " +
 
-                    "UNIQUE (" + ProductDBContract.ProductEntry.COLUNM_NAME_CODE + ", " +
+                    "UNIQUE (" + ProductDBContract.ProductEntry.COLUMN_NAME_CODE + ", " +
                                  ProductDBContract.ProductEntry.COLUMN_NAME_OCCASION + ")" +
                     ");";
 
