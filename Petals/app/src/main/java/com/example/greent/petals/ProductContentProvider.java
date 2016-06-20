@@ -71,10 +71,11 @@ public class ProductContentProvider extends ContentProvider {
         switch (match) {
             case PRODUCT:
             {
-                long entryId = mOpenHelper.getWritableDatabase().insert(
+                long entryId = mOpenHelper.getWritableDatabase().insertWithOnConflict(
                         ProductDBContract.ProductEntry.TABLE_NAME,
                         null,
-                        values
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE
                 );
 
                 if (entryId > 0) {
