@@ -3,12 +3,14 @@ package com.example.greent.petals.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by greent on 6/15/16.
  */
 
 public class ProductDBHelper extends SQLiteOpenHelper {
+    private static final String TAG = "ProductDBHelper";
     private static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "petals.db";
 
@@ -40,6 +42,7 @@ public class ProductDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d(TAG, "onCreate() called with: db = [" + db + "]");
         //create the product table
         db.execSQL(CREATE_PRODUCT_TABLE);
         db.execSQL(CREATE_CATEGORY_TABLE);

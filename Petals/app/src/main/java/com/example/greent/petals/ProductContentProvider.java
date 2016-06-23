@@ -6,11 +6,14 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.greent.petals.data.ProductDBContract;
 import com.example.greent.petals.data.ProductDBHelper;
 
 public class ProductContentProvider extends ContentProvider {
+
+    private static final String TAG = "ProductContentProvider";
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private ProductDBHelper mOpenHelper;
@@ -96,6 +99,7 @@ public class ProductContentProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
+        Log.d(TAG, "bulkInsert() called with: uri = [" + uri + "], values = [" + values + "]");
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
