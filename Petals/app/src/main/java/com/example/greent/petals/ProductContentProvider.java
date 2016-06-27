@@ -108,7 +108,9 @@ public class ProductContentProvider extends ContentProvider {
                 int returnCount = 0;
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(ProductDBContract.ProductEntry.TABLE_NAME, null, value);
+                        Uri returnedUri = insert(uri, value);
+                        //extract inserted row id from returned URI
+                        long _id = Long.parseLong(returnedUri.getLastPathSegment());
                         if (_id != -1) {
                             returnCount++;
                         }

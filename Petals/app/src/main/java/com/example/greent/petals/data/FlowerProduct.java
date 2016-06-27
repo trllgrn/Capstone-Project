@@ -6,15 +6,15 @@ package com.example.greent.petals.data;
 
 public class FlowerProduct {
 
-    String code;
-    String description;
-    String img_url_lg;
-    String img_url_sml;
-    String name;
-    String dimension;
-    String type;
-    String occasion;
-    double price;
+    public String code;
+    public String description;
+    public String img_url_lg;
+    public String img_url_sml;
+    public String name;
+    public String dimension;
+    public String type;
+    public String occasion;
+    public double price;
 
     public FlowerProduct() {
 

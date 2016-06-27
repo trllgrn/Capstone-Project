@@ -9,13 +9,15 @@
     tools:context="com.example.greent.petals.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
-        android:layout_width="wrap_content"
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_content_container"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="@+id/content_main"
-        app:layout_constraintLeft_toLeftOf="@+id/content_main"
-        app:layout_constraintRight_toRightOf="@+id/content_main"
-        app:layout_constraintTop_toTopOf="@+id/content_main" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:listitem="@layout/product_item">
+
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>
