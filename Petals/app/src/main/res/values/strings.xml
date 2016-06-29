@@ -5,5 +5,5 @@
     <string name="content_authority">com.example.greent.petals</string>
 
     <!-- Pressure format CHAR LIMIT=25] -->
-    <string name="format_price">$ <xliff:g id="item_price">%1.0f</xliff:g> </string>
+    <string name="format_price">$ <xliff:g id="item_price">%1.2f</xliff:g> </string>
 </resources>

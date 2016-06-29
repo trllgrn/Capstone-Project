@@ -1,5 +1,6 @@
 package com.example.greent.petals;
 
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.example.greent.petals.data.FlowerProduct;
 import com.example.greent.petals.data.ProductDBContract;
 import com.example.greent.petals.sync.PetalsSyncAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements
     RecyclerView mProductList;
     ArrayList<FlowerProduct> mProductsFromDB;
     ProductsAdapter mProductsAdapter;
+    ContentObserver mObserver;
 
     int PRODUCT_LOADER = 0;
 
@@ -55,18 +58,27 @@ public class MainActivity extends AppCompatActivity implements
 //                        .setAction("Action", null).show();
 //            }
 //        });
-        //init Sync Adapter
+
+
         PetalsSyncAdapter.initializeSyncAdapter(this);
 
-        //init Loader
-        getSupportLoaderManager().initLoader(PRODUCT_LOADER,null,this);
+        //if there's an active sync going on, let's register a listener for it before proceeding with
+        //loading up data from the DB
+
+        kickOffDBLoader();
 
         Log.d(TAG, "onCreate() returned: ");
     }
 
+    private void kickOffDBLoader() {
+        getSupportLoaderManager().initLoader(PRODUCT_LOADER,null,this);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d(TAG, "onLoadFinished() called with: loader = [" + loader + "], data = [" + data + "]");
-        if (data != null) {
+        if (data != null && data.getCount() > 0) {
             mProductsAdapter = new ProductsAdapter(cursorToList(data));
             mProductsAdapter.setHasStableIds(true);
             mProductList.setAdapter(mProductsAdapter);
@@ -118,7 +130,13 @@ public class MainActivity extends AppCompatActivity implements
             LinearLayoutManager lm = new LinearLayoutManager(this);
             lm.setOrientation(LinearLayoutManager.VERTICAL);
             mProductList.setLayoutManager(lm);
+        } else {
+            //There are no rows in the cursor, so there must be a fetch occurring
+            //register restart the loader
+            getSupportLoaderManager().restartLoader(PRODUCT_LOADER,null,this);
+
         }
+
         Log.d(TAG, "onLoadFinished() returned: ");
     }
 
@@ -182,11 +200,17 @@ public class MainActivity extends AppCompatActivity implements
             FlowerProduct fp = (FlowerProduct)mProductList.get(position);
             holder.productNameTextView.setText(fp.name);
             holder.productPriceTextView.setText(String.format(getString(R.string.format_price),fp.price));
+            Picasso.with(getBaseContext()).load(fp.img_url_lg).into(holder.productPicImageView);
         }
 
         @Override
         public int getItemCount() {
             return mProductList.size();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
