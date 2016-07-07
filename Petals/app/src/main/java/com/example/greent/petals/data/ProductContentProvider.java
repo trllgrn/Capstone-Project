@@ -1,4 +1,4 @@
-package com.example.greent.petals;
+package com.example.greent.petals.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -7,9 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
-
-import com.example.greent.petals.data.ProductDBContract;
-import com.example.greent.petals.data.ProductDBHelper;
 
 public class ProductContentProvider extends ContentProvider {
 
@@ -31,7 +28,7 @@ public class ProductContentProvider extends ContentProvider {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    static UriMatcher buildUriMatcher() {
+    public static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = ProductDBContract.CONTENT_AUTHORITY;
 

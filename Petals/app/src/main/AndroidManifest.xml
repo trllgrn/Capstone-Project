@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -29,22 +29,22 @@
         </activity>
 
         <provider
-            android:name=".ProductContentProvider"
+            android:name=".data.ProductContentProvider"
             android:authorities="@string/content_authority"
-            android:syncable="true"
-            android:exported="false" />
+            android:exported="false"
+            android:syncable="true" />
 
         <service
             android:name=".sync.PetalsAuthenticatorService"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator"/>
+                android:resource="@xml/authenticator" />
         </service>
-
         <service
             android:name=".sync.ProductSyncService"
             android:exported="false">
@@ -57,6 +57,22 @@
                 android:resource="@xml/syncadapter" />
         </service>
 
+        <activity
+            android:name=".ui.DetailActivity"
+            android:label="@string/title_activity_scrolling_detail"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.greent.petals.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.CartActivity"
+            android:label="@string/title_activity_cart"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

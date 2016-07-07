@@ -19,6 +19,7 @@ import android.content.UriMatcher;
 import android.net.Uri;
 import android.test.AndroidTestCase;
 
+import com.example.greent.petals.data.ProductContentProvider;
 import com.example.greent.petals.data.ProductDBContract;
 
 

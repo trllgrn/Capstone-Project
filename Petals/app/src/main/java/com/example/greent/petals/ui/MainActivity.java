@@ -1,5 +1,7 @@
-package com.example.greent.petals;
+package com.example.greent.petals.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.greent.petals.R;
 import com.example.greent.petals.data.FlowerProduct;
 import com.example.greent.petals.data.ProductDBContract;
 import com.example.greent.petals.sync.PetalsSyncAdapter;
@@ -99,6 +102,12 @@ public class MainActivity extends AppCompatActivity implements
             return true;
         }
 
+        if (id == R.id.action_viewcart) {
+            Intent intent = new Intent(this,CartActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -124,12 +133,14 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "onLoadFinished() called with: loader = [" + loader + "], data = [" + data + "]");
         if (data != null && data.getCount() > 0) {
             mProductsAdapter = new ProductsAdapter(cursorToList(data));
-            mProductsAdapter.setHasStableIds(true);
-            mProductList.setAdapter(mProductsAdapter);
+
+            mProductList.setHasFixedSize(true);
+
 
             LinearLayoutManager lm = new LinearLayoutManager(this);
             lm.setOrientation(LinearLayoutManager.VERTICAL);
             mProductList.setLayoutManager(lm);
+            mProductList.setAdapter(mProductsAdapter);
         } else {
             //There are no rows in the cursor, so there must be a fetch occurring
             //register restart the loader
@@ -162,19 +173,19 @@ public class MainActivity extends AppCompatActivity implements
             flowerProduct.type = data.getString(data.getColumnIndex(ProductDBContract.ProductEntry.COLUMN_NAME_TYPE));
             products.add(flowerProduct);
 
-        }while(data.moveToNext());
+        } while(data.moveToNext());
 
         return products;
     }
 
-    public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
+    public static class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
         private List<FlowerProduct> mProductList;
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            final CardView card;
-            final ImageView productPicImageView;
-            final TextView productNameTextView;
-            final TextView productPriceTextView;
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            public final CardView card;
+            public final ImageView productPicImageView;
+            public final TextView productNameTextView;
+            public final TextView productPriceTextView;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -184,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements
                 productPriceTextView = (TextView) itemView.findViewById(R.id.item_product_price);
             }
         }
+
         public ProductsAdapter(List<FlowerProduct> products) {
             super();
             mProductList = products;
@@ -192,15 +204,34 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item,parent,false);
-            return new ViewHolder(view);
+            ViewHolder vh = new ViewHolder(view);
+            return vh;
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            FlowerProduct fp = (FlowerProduct)mProductList.get(position);
+            final Context context = holder.productPicImageView.getContext();
+            final FlowerProduct fp = (FlowerProduct) mProductList.get(position);
+            Log.d(TAG, "onBindViewHolder: called for item at index: " + position);
+
             holder.productNameTextView.setText(fp.name);
-            holder.productPriceTextView.setText(String.format(getString(R.string.format_price),fp.price));
-            Picasso.with(getBaseContext()).load(fp.img_url_lg).into(holder.productPicImageView);
+            holder.productPriceTextView.setText(String.format(context.getString(R.string.format_price),fp.price));
+            Picasso.with(context).load(fp.img_url_lg).into(holder.productPicImageView);
+
+            //Retrieve the specified item from the dataList
+
+
+            holder.productPicImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Add the product to the args for the detail activity
+                    Bundle args = new Bundle();
+                    args.putParcelable(context.getString(R.string.detail_product_key),fp);
+                    final Intent intent = new Intent(context,DetailActivity.class);
+                    intent.putExtras(args);
+                    context.startActivity(intent);
+                }
+            });
         }
 
         @Override
