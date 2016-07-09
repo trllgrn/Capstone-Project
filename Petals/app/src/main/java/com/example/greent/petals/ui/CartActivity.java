@@ -35,6 +35,8 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
     private ArrayList<FlowerProduct> mProductsFromDB;
     RecyclerView mLineItemList;
     LineItemAdapter mCartAdapter;
+    private double mOrderTotal = 0.00;
+    private String mImageURL;
 
     private static int mItemIndex = 0;
 
@@ -89,6 +91,7 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
             }
         });
     }

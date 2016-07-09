@@ -5,7 +5,7 @@
     <string name="content_authority">com.example.greent.petals</string>
     <string name="cart_activity_title">Cart</string>
     <string name="title_activity_cart">Cart</string>
-    <string name ="detail_activity_title">Detail</string>
+    <string name="detail_activity_title">Detail</string>
     <string name="checkout_activity_title">Checkout</string>
     <string name="cart_subtotal_label">Subtotal: </string>
     <string name="cart_delivery_label">Delivery Fee: </string>
@@ -17,6 +17,11 @@
     <string name="action_viewcart">View Cart</string>
 
     <string name="detail_product_key">detail_product_key</string>
+
+    <string name="checkout_order_total_key">checkout_order_total</string>
+    <string name="checkout_order_name">checkout_order_name</string>
+    <string name="checkout_order_img_url">checkout_order_image_url</string>
+    <string name="checkout_selected_product">checkout_selected_product</string>
 
     <!-- Pressure format CHAR LIMIT=25] -->
     <string name="format_price">$ <xliff:g id="item_price">%1.2f</xliff:g> </string>
@@ -110,4 +115,5 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="title_activity_checkout">CheckoutActivity</string>
 </resources>
