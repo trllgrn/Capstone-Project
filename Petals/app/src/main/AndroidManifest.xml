@@ -5,6 +5,9 @@
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Permission to read Contacts for Contacts Picker -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <!-- Permissions required by the sync adapter -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />

@@ -23,6 +23,10 @@
     <string name="checkout_order_img_url">checkout_order_image_url</string>
     <string name="checkout_selected_product">checkout_selected_product</string>
 
+    <string name="dialog_message_title">Message</string>
+    <string name="dialog_message_negative_btn">Cancel</string>
+    <string name="dialog_message_positive_btn">OK</string>
+
     <!-- Pressure format CHAR LIMIT=25] -->
     <string name="format_price">$ <xliff:g id="item_price">%1.2f</xliff:g> </string>
     <string name="title_activity_scrolling_detail">ScrollingDetailActivity</string>
