@@ -32,16 +32,20 @@ public class CheckoutActivity extends AppCompatActivity {
     private static final String TAG = "CheckoutActivity";
 
     FlowerProduct mSelectedProduct;
-    final double DELIVERY_FEE = 5.00;
+    final double DELIVERY_FEE = 10.00;
     double mTaxPercentage = 0.08;
     MessageDialogFragment mMessagePopUp;
     static final int PICK_CONTACT_REQUEST = 100;
+    String userSubmittedMessage;
+    String userSubmittedRecName;
+    String userSubmittedRecAddress;
     TextView mMessageContentTextView;
     TextView mRecipientNameTextView;
     TextView mRecipientAddressTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -75,6 +79,20 @@ public class CheckoutActivity extends AppCompatActivity {
             mRecipientNameTextView = (TextView) findViewById(R.id.checkout_recipient_name);
 
             mRecipientAddressTextView = (TextView) findViewById(R.id.checkout_recipient_address_line);
+
+            //Restore User entry if they existed
+            if (savedInstanceState != null) {
+                String savedMessage = savedInstanceState.getString(getString(R.string.checkout_bundle_message_key));
+                Log.d(TAG, "onCreate: restoring savedMessage: " + savedMessage);
+                mMessageContentTextView.setText(savedMessage);
+                String savedRecName = savedInstanceState.getString(getString(R.string.checkout_bundle_rec_name_key));
+                Log.d(TAG, "onCreate: restoring savedRecName: " + savedRecName);
+                mRecipientNameTextView.setText(savedRecName);
+                String savedRecAddress = savedInstanceState.getString(getString(R.string.checkout_bundle_rec_address_key));
+                Log.d(TAG, "onCreate: restoring savedRecAddress: " + savedRecAddress);
+                mRecipientAddressTextView.setText(savedRecAddress);
+            }
+
 
 
 
@@ -119,7 +137,8 @@ public class CheckoutActivity extends AppCompatActivity {
 
     public void processDialogPositiveClick(String message) {
         Log.d(TAG, "processDialogPositiveClick: Positive Message Dialog button pressed.");
-        mMessageContentTextView.setText(message);
+        userSubmittedMessage = message;
+        mMessageContentTextView.setText(userSubmittedMessage);
     }
 
     public void processDialogNegativeClick() {
@@ -180,26 +199,40 @@ public class CheckoutActivity extends AppCompatActivity {
                 Log.d(TAG, "onActivityResult: postalColumn #: " + postalColumn);
                 String number = cursor.getString(column);
 
-                String postalAddress = cursor.getString(postalColumn);
+                userSubmittedRecAddress = cursor.getString(postalColumn);
 
-                String recipientName = cursor.getString(0);
+                userSubmittedRecName = cursor.getString(0);
 
-                Log.d(TAG, "onActivityResult: captured Name: " + recipientName);
+                Log.d(TAG, "onActivityResult: captured Name: " + userSubmittedRecAddress);
 
-                Log.d(TAG, "onActivityResult: captured address: " + postalAddress);
+                Log.d(TAG, "onActivityResult: captured address: " + userSubmittedRecName);
 
 
                 // Do something with the phone number...
-                mRecipientNameTextView.setText(recipientName);
 
-                mRecipientAddressTextView.setText(postalAddress);
+                mRecipientNameTextView.setText(userSubmittedRecName);
+
+                mRecipientAddressTextView.setText(userSubmittedRecAddress);
 
                 cursor.close();
             }
         }
+
     }
 
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //save the message
+        Log.d(TAG, "onSaveInstanceState: saving Message content: " + mMessageContentTextView.getText().toString());
+        outState.putString(getString(R.string.checkout_bundle_message_key),mMessageContentTextView.getText().toString());
+        //save the recipient name
+        Log.d(TAG, "onSaveInstanceState: saving To Name: " + mRecipientNameTextView.getText().toString());
+        outState.putString(getString(R.string.checkout_bundle_rec_name_key),mRecipientNameTextView.getText().toString());
+        //save the recipient address
+        Log.d(TAG, "onSaveInstanceState: saving Address: " + mRecipientAddressTextView.getText().toString());
+        outState.putString(getString(R.string.checkout_bundle_rec_address_key),mRecipientAddressTextView.getText().toString());
+    }
 
 
     public static class MessageDialogFragment extends DialogFragment {
@@ -269,6 +302,4 @@ public class CheckoutActivity extends AppCompatActivity {
             return builder.create();
         }
     }
-
-
 }
