@@ -3,26 +3,41 @@ package com.example.greent.petals.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.greent.petals.R;
+import com.example.greent.petals.data.AnalyticsApplication;
 import com.example.greent.petals.data.FlowerProduct;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
+
+    private static final String TAG = "DetailActivity";
+
+    //Analytics Setup
+    Tracker mTracker;
 
     FlowerProduct mSelectedProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Setup Analytics
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
+
         setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -34,10 +49,11 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 sendToCheckout();
-                Snackbar.make(view, "Item Added to Cart!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Item Added to Cart!", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -67,6 +83,14 @@ public class DetailActivity extends AppCompatActivity {
             detailProductName.setText(mSelectedProduct.name);
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "Setting screen name: " + TAG);
+        mTracker.setScreenName("Image~" + TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public DetailActivity() {

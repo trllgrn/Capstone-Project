@@ -24,9 +24,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.greent.petals.R;
+import com.example.greent.petals.data.AnalyticsApplication;
 import com.example.greent.petals.data.FlowerProduct;
 import com.example.greent.petals.data.ProductDBContract;
 import com.example.greent.petals.sync.PetalsSyncAdapter;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -34,6 +37,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
+
+    //Analytics Setup
+    Tracker mTracker;
 
     private static final String TAG = "MainActivity";
     RecyclerView mProductList;
@@ -62,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements
 //            }
 //        });
 
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
 
         PetalsSyncAdapter.initializeSyncAdapter(this);
 
@@ -81,6 +90,14 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "Setting screen name: " + TAG);
+        mTracker.setScreenName("Image~" + TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

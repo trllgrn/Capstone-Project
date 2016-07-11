@@ -26,6 +26,7 @@
     <string name="checkout_bundle_message_key">message</string>
     <string name="checkout_bundle_rec_name_key">recipient_name</string>
     <string name="checkout_bundle_rec_address_key">recipient_address</string>
+    <string name="checkout_email_subject">Your Petals Order is on its Way!</string>
 
     <string name="dialog_message_title">Message</string>
     <string name="dialog_message_negative_btn">Cancel</string>

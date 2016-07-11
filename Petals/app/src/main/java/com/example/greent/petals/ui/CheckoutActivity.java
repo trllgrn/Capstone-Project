@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,26 +23,42 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.greent.petals.R;
+import com.example.greent.petals.data.AnalyticsApplication;
 import com.example.greent.petals.data.FlowerProduct;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class CheckoutActivity extends AppCompatActivity {
+public class CheckoutActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "CheckoutActivity";
+
+    //Analytics Setup
+    Tracker mTracker;
 
     FlowerProduct mSelectedProduct;
     final double DELIVERY_FEE = 10.00;
     double mTaxPercentage = 0.08;
     MessageDialogFragment mMessagePopUp;
     static final int PICK_CONTACT_REQUEST = 100;
-    String userSubmittedMessage;
-    String userSubmittedRecName;
-    String userSubmittedRecAddress;
+    private static final int RC_SIGN_IN = 9001;
+    String userSubmittedMessage = null;
+    String userSubmittedRecName = null;
+    String userSubmittedRecAddress = null;
+    String mUserEmailAddress = "";
     TextView mMessageContentTextView;
     TextView mRecipientNameTextView;
     TextView mRecipientAddressTextView;
+    private GoogleApiClient mGoogleApiClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +67,21 @@ public class CheckoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_checkout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
+        //Configure Google Sign-in
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        //Create a Play Services API Client
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
         Bundle startArgs = getIntent().getExtras();
 
@@ -126,13 +158,42 @@ public class CheckoutActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Snackbar.make(view, "Order Submitted!", Snackbar.LENGTH_LONG)
-                    //        .setAction("Action", null).show();
-                    //validateSubmission();
+                    if (userSubmittedRecAddress == null) {
+                        Log.d(TAG, "onClick: Recipient not set.");
+                        Snackbar.make(view, "Hi. Please choose select a recipient.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    } else {
+                        Log.d(TAG, "onClick: Recipient set. Trying sign in...");
+                        signIn();
+                        //sendOrderEmailToUser();
+                    }
                 }
             });
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void sendOrderEmailToUser() {
+        Intent orderEmailIntent = new Intent(Intent.ACTION_SENDTO);
+        orderEmailIntent.setType("text/plain");
+        orderEmailIntent.putExtra(Intent.EXTRA_EMAIL,mUserEmailAddress);
+        orderEmailIntent.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.checkout_email_subject));
+        orderEmailIntent.putExtra(Intent.EXTRA_TEXT, composeEmailBody());
+        if (orderEmailIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(orderEmailIntent);
+        }
+    }
+
+    private String composeEmailBody() {
+        String emailBody = "Thank you so much for your Order.\n" +
+                           mSelectedProduct.name + "is sure to brighten up the day for " + mRecipientNameTextView + ".\n" +
+                           "\n\nSincerely,\n" + "Petals Team";
+        return emailBody;
     }
 
     public void processDialogPositiveClick(String message) {
@@ -216,8 +277,29 @@ public class CheckoutActivity extends AppCompatActivity {
 
                 cursor.close();
             }
+        } else if (requestCode == RC_SIGN_IN) {
+            //Handle sign-in result here
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+            if (result.isSuccess()) {
+                // Signed in successfully, show authenticated UI.
+                GoogleSignInAccount acct = result.getSignInAccount();
+                mUserEmailAddress = acct.getEmail();
+                sendOrderEmailToUser();
+            } else {
+                // Signed out, show unauthenticated UI.
+                Log.d(TAG, "onActivityResult: sign in failed or User declined" + result.getStatus().getStatusMessage());
+            }
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "Setting screen name: " + TAG);
+        mTracker.setScreenName("Image~" + TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -232,6 +314,11 @@ public class CheckoutActivity extends AppCompatActivity {
         //save the recipient address
         Log.d(TAG, "onSaveInstanceState: saving Address: " + mRecipientAddressTextView.getText().toString());
         outState.putString(getString(R.string.checkout_bundle_rec_address_key),mRecipientAddressTextView.getText().toString());
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed: Google Sign on Failed: cause this stuff - " + connectionResult.toString());
     }
 
 
