@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.greent.petals.R;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements
     ArrayList<FlowerProduct> mProductsFromDB;
     ProductsAdapter mProductsAdapter;
     ContentObserver mObserver;
+    ProgressBar loadingSpinner;
 
     int PRODUCT_LOADER = 0;
 
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
         setContentView(R.layout.activity_main);
+
+        loadingSpinner = (ProgressBar) findViewById(R.id.loading_bar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.app_name));
@@ -78,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements
         //loading up data from the DB
 
         kickOffDBLoader();
+        loadingSpinner.setVisibility(View.VISIBLE);
 
         Log.d(TAG, "onCreate() returned: ");
     }
@@ -152,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements
             lm.setOrientation(LinearLayoutManager.VERTICAL);
             mProductList.setLayoutManager(lm);
             mProductList.setAdapter(mProductsAdapter);
+            loadingSpinner.setVisibility(View.GONE);
         } else {
             //There are no rows in the cursor, so there must be a fetch occurring
             //register restart the loader

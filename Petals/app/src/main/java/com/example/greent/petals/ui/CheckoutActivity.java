@@ -50,6 +50,7 @@ public class CheckoutActivity extends AppCompatActivity implements GoogleApiClie
     MessageDialogFragment mMessagePopUp;
     static final int PICK_CONTACT_REQUEST = 100;
     private static final int RC_SIGN_IN = 9001;
+    private static final int SEND_EMAIL_REQUEST = 200;
     String userSubmittedMessage = null;
     String userSubmittedRecName = null;
     String userSubmittedRecAddress = null;
@@ -196,20 +197,23 @@ public class CheckoutActivity extends AppCompatActivity implements GoogleApiClie
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void sendOrderEmailToUser() {
+    private void sendOrderEmailToUser(String sendToAddress) {
+        Log.d(TAG, "sendOrderEmailToUser() called with: sendToAddress = [" + sendToAddress + "]");
         Intent orderEmailIntent = new Intent(Intent.ACTION_SENDTO);
-        orderEmailIntent.setType("text/plain");
-        orderEmailIntent.putExtra(Intent.EXTRA_EMAIL,mUserEmailAddress);
+        orderEmailIntent.setData(Uri.parse("mailto:"));
+        orderEmailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {sendToAddress});
         orderEmailIntent.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.checkout_email_subject));
         orderEmailIntent.putExtra(Intent.EXTRA_TEXT, composeEmailBody());
         if (orderEmailIntent.resolveActivity(getPackageManager()) != null) {
+            Log.d(TAG, "sendOrderEmailToUser: sending IntentForResult");
             startActivity(orderEmailIntent);
         }
+        //startActivity(new Intent(this,MainActivity.class));
     }
 
     private String composeEmailBody() {
         String emailBody = "Thank you so much for your Order.\n" +
-                           mSelectedProduct.name + "is sure to brighten up the day for " + mRecipientNameTextView + ".\n" +
+                           mSelectedProduct.name + " is sure to brighten up the day for " + userSubmittedRecName + ".\n" +
                            "\n\nSincerely,\n" + "Petals Team";
         return emailBody;
     }
@@ -302,8 +306,9 @@ public class CheckoutActivity extends AppCompatActivity implements GoogleApiClie
             if (result.isSuccess()) {
                 // Signed in successfully, show authenticated UI.
                 GoogleSignInAccount acct = result.getSignInAccount();
-                mUserEmailAddress = acct.getEmail();
-                sendOrderEmailToUser();
+                String gsoEmail = acct.getEmail();
+                Log.d(TAG, "onActivityResult: got User email: " + gsoEmail);
+                sendOrderEmailToUser(gsoEmail);
             } else {
                 // Signed out, show unauthenticated UI.
                 Log.d(TAG, "onActivityResult: sign in failed or User declined" + result.getStatus().getStatusMessage());

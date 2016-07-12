@@ -297,6 +297,7 @@
                         android:id="@+id/checkout_recipient_address_line"
                         tools:text="1234 Main St."
                         android:padding="8dp"
+                        android:text="@string/checkout_recipient_stub"
                         android:layout_marginStart="@dimen/detail_content_margin_left"
                         android:layout_marginLeft="@dimen/detail_content_margin_left"
                         android:layout_marginEnd="@dimen/detail_content_margin_right"

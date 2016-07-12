@@ -30,6 +30,7 @@
     <string name="checkout_message_label">Message: </string>
     <string name="checkout_recipient_label">Recipient: </string>
     <string name="checkout_message_stub">I thought about how wonderful it would be for you to have a smile on your face.  Here is hoping I have helped to put one there.</string>
+    <string name="checkout_recipient_stub">Tap to choose a Recipient.</string>
 
     <string name="checkout_bundle_message_key">message</string>
     <string name="checkout_bundle_rec_name_key">recipient_name</string>
