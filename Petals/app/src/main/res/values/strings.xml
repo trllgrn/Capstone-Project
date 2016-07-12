@@ -46,4 +46,7 @@
     <string name="title_activity_scrolling_detail">ScrollingDetailActivity</string>
 
     <string name="title_activity_checkout">CheckoutActivity</string>
+    <string name="appwidget_title">Bouquet of the Day</string>
+    <string name="widget_image_content_description">Prodcut of the Day Image</string>
+    <string name="add_widget">Add widget</string>
 </resources>
