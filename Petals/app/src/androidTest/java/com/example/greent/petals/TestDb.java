@@ -84,7 +84,7 @@ public class TestDb extends AndroidTestCase {
 
 
         //Verify correct creation of category table
-
+        c.close();
         db.close();
     }
 

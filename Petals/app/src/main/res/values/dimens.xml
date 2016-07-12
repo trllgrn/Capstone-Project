@@ -5,4 +5,16 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">56dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="product_image_height">320dp</dimen>
+    <dimen name="list_item_price_padding">8dp</dimen>
+    <dimen name="card_content_block_padding_top">24dp</dimen>
+    <dimen name="card_content_block_padding_bottom">16dp</dimen>
+    <dimen name="recylcerview_vertical_padding">8dp</dimen>
+
+
+    <dimen name="detail_price_padding">16dp</dimen>
+    <dimen name="detail_description_padding">16dp</dimen>
+    <dimen name="detail_dimensions_padding">16dp</dimen>
+    <dimen name="detail_content_margin_left">72dp</dimen>
+    <dimen name="detail_content_margin_right">32dp</dimen>
 </resources>

@@ -57,6 +57,10 @@ public class CheckoutActivity extends AppCompatActivity implements GoogleApiClie
     TextView mMessageContentTextView;
     TextView mRecipientNameTextView;
     TextView mRecipientAddressTextView;
+    TextView mTotalDelivery;
+    TextView mTotalTax;
+    TextView mTotalSub;
+    TextView mTotalGrand;
     private GoogleApiClient mGoogleApiClient;
 
 
@@ -111,6 +115,20 @@ public class CheckoutActivity extends AppCompatActivity implements GoogleApiClie
             mRecipientNameTextView = (TextView) findViewById(R.id.checkout_recipient_name);
 
             mRecipientAddressTextView = (TextView) findViewById(R.id.checkout_recipient_address_line);
+
+            //Set Totals
+            mTotalDelivery = (TextView) findViewById(R.id.cart_delivery_value);
+            mTotalDelivery.setText(String.format(getString(R.string.format_price),DELIVERY_FEE));
+
+            mTotalTax = (TextView) findViewById(R.id.cart_tax_value);
+            mTotalTax.setText(String.format(getString(R.string.format_price), mSelectedProduct.price*mTaxPercentage));
+
+            mTotalSub = (TextView) findViewById(R.id.cart_subtotal_value);
+            mTotalSub.setText(String.format(getString(R.string.format_price),mSelectedProduct.price));
+
+            mTotalGrand = (TextView) findViewById(R.id.cart_total_value);
+            double grandTotal = DELIVERY_FEE + mSelectedProduct.price + (mSelectedProduct.price*mTaxPercentage);
+            mTotalGrand.setText(String.format(getString(R.string.format_price),grandTotal));
 
             //Restore User entry if they existed
             if (savedInstanceState != null) {

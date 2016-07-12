@@ -76,18 +76,13 @@
                 android:value="com.example.greent.petals.ui.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.CartActivity"
-            android:label="@string/title_activity_cart"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
             android:name=".ui.CheckoutActivity"
             android:label="@string/title_activity_checkout"
-            android:parentActivityName=".ui.CartActivity"
+            android:parentActivityName=".ui.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.greent.petals.ui.CartActivity" />
+                android:value="com.example.greent.petals.ui.DetailActivity" />
         </activity>
     </application>
 

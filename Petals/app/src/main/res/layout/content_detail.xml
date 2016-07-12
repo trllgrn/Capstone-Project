@@ -16,21 +16,44 @@
 
         <ImageView
             android:id="@+id/detail_product_imageview"
+            android:contentDescription="@string/list_item_product_image_description"
             android:layout_width="match_parent"
             android:layout_height="256dp"
+            android:scaleType="fitCenter"
             tools:src="@drawable/flower_test_image"/>
         <TextView
-            android:id="@+id/detail_product_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/detail_product_descrption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
             android:id="@+id/detail_product_price"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:gravity="right|center"
+            android:layout_marginEnd="@dimen/detail_content_margin_right"
+            android:layout_marginRight="@dimen/detail_content_margin_right"
+            android:padding="@dimen/detail_price_padding"
+            tools:text="$49.99"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:id="@+id/detail_product_descrption"
+            android:padding="@dimen/detail_description_padding"
+            android:layout_marginStart="@dimen/detail_content_margin_left"
+            android:layout_marginLeft="@dimen/detail_content_margin_left"
+            android:layout_marginRight="@dimen/detail_content_margin_right"
+            android:layout_marginEnd="@dimen/detail_content_margin_right"
+            tools:text="Oh, what a fine day it will be when you have this delightful spring bouquet delivered to someone special. Everyone will delight in the vibrant colors and bountiful blossoms, all thoughtfully arranged in a beautiful leaf-lined vase. Light yellow roses, hot pink spray roses, tulips and gerberas, yellow carnations, green button spray chrysanthemums and lavender cushion spray chrysanthemums are delivered in an exclusive cube vase. You'll have many fine days when you send this beautiful bouquet!"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:id="@+id/detail_product_dimension"
+            tools:text="@string/detail_dimensions_stub"
+            android:padding="@dimen/detail_description_padding"
+            android:layout_marginLeft="@dimen/detail_content_margin_left"
+            android:layout_marginStart="@dimen/detail_content_margin_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
 
 
 

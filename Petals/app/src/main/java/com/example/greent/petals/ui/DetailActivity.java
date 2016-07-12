@@ -79,8 +79,8 @@ public class DetailActivity extends AppCompatActivity {
             TextView detailProductPrice = (TextView) findViewById(R.id.detail_product_price);
             detailProductPrice.setText(String.format(getString(R.string.format_price),mSelectedProduct.price));
 
-            TextView detailProductName = (TextView) findViewById(R.id.detail_product_name);
-            detailProductName.setText(mSelectedProduct.name);
+            TextView detailProductName = (TextView) findViewById(R.id.detail_product_dimension);
+            detailProductName.setText(mSelectedProduct.dimension);
         }
 
     }

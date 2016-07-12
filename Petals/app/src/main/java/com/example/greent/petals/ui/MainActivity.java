@@ -119,12 +119,6 @@ public class MainActivity extends AppCompatActivity implements
             return true;
         }
 
-        if (id == R.id.action_viewcart) {
-            Intent intent = new Intent(this,CartActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -228,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             final Context context = holder.productPicImageView.getContext();
-            final FlowerProduct fp = (FlowerProduct) mProductList.get(position);
+            final FlowerProduct fp = mProductList.get(position);
             Log.d(TAG, "onBindViewHolder: called for item at index: " + position);
 
             holder.productNameTextView.setText(fp.name);

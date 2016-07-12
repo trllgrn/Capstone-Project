@@ -20,22 +20,49 @@
         <ImageView
             android:id="@+id/item_product_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/product_image_height"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:contentDescription="@string/list_item_product_image_description"
             android:scaleType="fitCenter"
             tools:src="@drawable/flower_test_image"/>
-        <TextView
-            style="@style/TextAppearance.AppCompat.Title"
-            android:id="@+id/item_product_name"
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+        <LinearLayout
+            android:id="@+id/list_item_content_block"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="The Lavender Rose Bouquet"/>
+            android:paddingTop="@dimen/card_content_block_padding_top"
+            android:paddingLeft="@dimen/activity_vertical_margin"
+            android:paddingRight="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/card_content_block_padding_bottom">
 
-        <TextView
-            style="@style/TextAppearance.AppCompat.Title"
-            android:id="@+id/item_product_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="$49.95"/>
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:paddingLeft="@dimen/list_item_price_padding"
+                android:paddingStart="@dimen/list_item_price_padding"
+                android:paddingRight="@dimen/list_item_price_padding"
+                android:paddingEnd="@dimen/list_item_price_padding"
+                android:id="@+id/item_product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="The Lavender Rose Bouquet"/>
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:padding="@dimen/list_item_price_padding"
+                android:id="@+id/item_product_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="$49.95"/>
+        </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
 
